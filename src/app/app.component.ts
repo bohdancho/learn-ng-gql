@@ -1,13 +1,16 @@
 import { Component } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
-import { TodoComponent } from './todo/todo.component'
+import { TodoListComponent } from './todo-list/todo-list.component'
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, TodoComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+  imports: [RouterOutlet, TodoListComponent],
+  template: `
+    <main class="main"><app-todo-list /></main>
+
+    <router-outlet />
+  `,
 })
 export class AppComponent {
   title = 'learn-ng-gql'

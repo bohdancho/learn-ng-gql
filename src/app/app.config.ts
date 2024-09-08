@@ -1,9 +1,14 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core'
+import { provideRouter } from '@angular/router'
 
-import { routes } from './app.routes';
-import { provideStore } from '@ngrx/store';
+import { routes } from './app.routes'
+import { provideStore } from '@ngrx/store'
+import { todosReducer } from './state/todos.reducer'
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideStore()]
-};
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideRouter(routes),
+    provideStore({ todos: todosReducer }),
+  ],
+}
