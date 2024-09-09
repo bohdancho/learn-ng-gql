@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core'
 import { Store } from '@ngrx/store'
 import { selectTodos } from '../state/todos.selectors'
 import { CommonModule } from '@angular/common'
-import { FormControl, ReactiveFormsModule } from '@angular/forms'
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms'
 import { todosActions } from '../state/todos.actions'
 import { TodoItemComponent } from './todo.component'
 
@@ -23,13 +23,17 @@ import { TodoItemComponent } from './todo.component'
     <input
       type="text"
       placeholder="new todo"
-      [formControl]="input"
+      [formControl]="newTodoInput"
+      (blur)="newTodoInput.markAsPristine()"
       (keyup.enter)="onAdd()"
-    /> `,
+    />
+    <p *ngIf="newTodoInput.invalid && newTodoInput.dirty">
+      Please enter a valid todo
+    </p> `,
 })
 export class TodoListComponent {
   private store = inject(Store)
-  input = new FormControl('')
+  newTodoInput = new FormControl('', [Validators.required])
   todos$ = this.store.select(selectTodos)
 
   constructor() {
@@ -37,9 +41,13 @@ export class TodoListComponent {
   }
 
   onAdd() {
-    const text = this.input.value!
+    if (this.newTodoInput.invalid) {
+      this.newTodoInput.markAsDirty()
+      return
+    }
+    const text = this.newTodoInput.value!
     this.store.dispatch(todosActions.addTodo({ text }))
-    this.input.reset()
+    this.newTodoInput.reset()
   }
 
   onSetDone(id: number, done: boolean) {
