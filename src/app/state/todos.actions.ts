@@ -6,5 +6,6 @@ export const todosActions = createActionGroup({
   events: {
     'Add Todo': props<Pick<Todo, 'text'>>(),
     'Remove Todo': props<Pick<Todo, 'id'>>(),
+    'Set Done': props<Pick<Todo, 'id' | 'done'>>(),
   },
 })

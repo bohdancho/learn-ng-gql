@@ -2,7 +2,10 @@ import { createReducer, on } from '@ngrx/store'
 import { Todo } from '../todo-list/todo.model'
 import { todosActions } from './todos.actions'
 
-export const initialState: ReadonlyArray<Todo> = []
+export const initialState: ReadonlyArray<Todo> = [
+  { text: 'first todo', done: false, id: -2 },
+  { text: 'second todo', done: true, id: -1 },
+]
 let id = 0
 
 export const todosReducer = createReducer(
@@ -13,5 +16,11 @@ export const todosReducer = createReducer(
   ]),
   on(todosActions.removeTodo, (state, { id }) =>
     state.filter((todo) => todo.id !== id)
+  ),
+  on(todosActions.setDone, (state, { id, done }) =>
+    state.map((todo) => {
+      if (todo.id !== id) return todo
+      return { ...todo, done }
+    })
   )
 )
