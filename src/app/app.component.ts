@@ -7,11 +7,12 @@ import { TodoListComponent } from './todo-list/todo-list.component'
   standalone: true,
   imports: [RouterOutlet, TodoListComponent],
   template: `
-    <main class="main"><app-todo-list /></main>
+    <main class="main">
+      <h1>Welcome to 0815 todo app</h1>
+      <app-todo-list />
+    </main>
 
     <router-outlet />
   `,
 })
-export class AppComponent {
-  title = 'learn-ng-gql'
-}
+export class AppComponent {}
