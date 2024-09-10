@@ -54,15 +54,25 @@ export class TodoListComponent {
       return
     }
     const text = this.newTodoInput.value!
-
+    this.todoService.addTodo(text).subscribe(({ data }) => {
+      if (data) {
+        this.store.dispatch(TodosActions.addTodo(data.addTodo))
+      }
+    })
     this.newTodoInput.reset()
   }
 
-  onSetDone(id: number, done: boolean) {
-    this.store.dispatch(TodosActions.setTodoDone({ id, done }))
+  onRemove(id: number) {
+    this.todoService
+      .removeTodo(id)
+      .subscribe(() => this.store.dispatch(TodosActions.removeTodo({ id })))
   }
 
-  onRemove(id: number) {
-    this.store.dispatch(TodosActions.removeTodo({ id }))
+  onSetDone(id: number, done: boolean) {
+    this.todoService
+      .setTodoDone(id, done)
+      .subscribe(() =>
+        this.store.dispatch(TodosActions.setTodoDone({ id, done }))
+      )
   }
 }

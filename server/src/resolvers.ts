@@ -35,22 +35,22 @@ export const resolvers = {
       }
       return true
     },
-    setTodoDone(_: unknown, args: { id: number; done: boolean }): Todo {
-      let foundTodo: Todo | undefined = undefined
+    setTodoDone(_: unknown, args: { id: number; done: boolean }): boolean {
+      let found = false
       todos = todos.map((todo) => {
         if (todo.id !== args.id) return todo
-        foundTodo = { ...todo, done: args.done }
-        return foundTodo
+        found = true
+        return { ...todo, done: args.done }
       })
 
-      if (!foundTodo) {
+      if (!found) {
         throw new GraphQLError('Todo not found', {
           extensions: {
             code: 'BAD_USER_INPUT',
           },
         })
       }
-      return foundTodo
+      return true
     },
   },
 }
