@@ -1,10 +1,12 @@
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { Component, inject } from '@angular/core'
 import { Store } from '@ngrx/store'
 import { selectTodos } from '../state/todos.selectors'
 import { CommonModule } from '@angular/common'
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms'
-import { todosActions } from '../state/todos.actions'
+import { TodosActions, TodosApiActions } from '../state/todos.actions'
 import { TodoItemComponent } from './todo.component'
+import { TodoService } from './todo.service'
 
 @Component({
   selector: 'app-todo-list',
@@ -33,11 +35,17 @@ import { TodoItemComponent } from './todo.component'
 })
 export class TodoListComponent {
   private store = inject(Store)
+  private todoService = inject(TodoService)
   newTodoInput = new FormControl('', [Validators.required])
   todos$ = this.store.select(selectTodos)
 
   constructor() {
-    this.todos$.subscribe(console.log)
+    this.todoService
+      .retreiveTodos()
+      .pipe(takeUntilDestroyed())
+      .subscribe(({ data: todos }) => {
+        this.store.dispatch(TodosApiActions.retrievedTodosList(todos))
+      })
   }
 
   onAdd() {
@@ -46,15 +54,15 @@ export class TodoListComponent {
       return
     }
     const text = this.newTodoInput.value!
-    this.store.dispatch(todosActions.addTodo({ text }))
+
     this.newTodoInput.reset()
   }
 
   onSetDone(id: number, done: boolean) {
-    this.store.dispatch(todosActions.setDone({ id, done }))
+    this.store.dispatch(TodosActions.setTodoDone({ id, done }))
   }
 
   onRemove(id: number) {
-    this.store.dispatch(todosActions.removeTodo({ id }))
+    this.store.dispatch(TodosActions.removeTodo({ id }))
   }
 }
