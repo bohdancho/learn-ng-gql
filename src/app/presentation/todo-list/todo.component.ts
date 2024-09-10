@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
-import { Todo } from '../../../shared/todo.model'
+import { TodoModel } from '@core/domain/todo/todo.model'
 
 @Component({
   selector: 'app-todo-item',
@@ -16,7 +16,7 @@ import { Todo } from '../../../shared/todo.model'
   </li>`,
 })
 export class TodoItemComponent {
-  @Input() todo!: Todo
+  @Input() todo!: TodoModel
   @Output() setDone = new EventEmitter<boolean>()
   @Output() remove = new EventEmitter<void>()
 

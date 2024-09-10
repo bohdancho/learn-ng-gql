@@ -17,11 +17,12 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
-    "lib": [
-      "ES2022",
-      "dom",
-      "esnext.asynciterable"
-    ],
+    "lib": ["ES2022", "dom", "esnext.asynciterable"],
+    "paths": {
+      "@core/*": ["./src/app/core/*"],
+      "@data/*": ["./src/app/data/*"],
+      "@presentation/*": ["./src/app/presentation/*"]
+    },
     "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {

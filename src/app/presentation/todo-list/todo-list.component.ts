@@ -1,12 +1,12 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { Component, inject } from '@angular/core'
 import { Store } from '@ngrx/store'
-import { selectTodos } from '../state/todos.selectors'
 import { CommonModule } from '@angular/common'
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms'
-import { TodosActions, TodosApiActions } from '../state/todos.actions'
+import { TodosActions, TodosApiActions } from '../../data/store/todos.actions'
 import { TodoItemComponent } from './todo.component'
-import { TodoService } from './todo.service'
+import { TodoRepository } from '../../data/repository/todo.repository'
+import { selectTodos } from '@data/store/todos.selectors'
 
 @Component({
   selector: 'app-todo-list',
@@ -14,7 +14,7 @@ import { TodoService } from './todo.service'
   imports: [CommonModule, ReactiveFormsModule, TodoItemComponent],
   template: `<p>todos:</p>
     <ul>
-      @for (todo of todos$ | async; track todo.id) {
+      @for (todo of (todos$ | async)?.data; track todo.id) {
       <app-todo-item
         [todo]="todo"
         (remove)="onRemove(todo.id)"
@@ -31,20 +31,20 @@ import { TodoService } from './todo.service'
     />
     <p *ngIf="newTodoInput.invalid && newTodoInput.dirty">
       Please enter a valid todo
-    </p> `,
+    </p>`,
 })
 export class TodoListComponent {
   private store = inject(Store)
-  private todoService = inject(TodoService)
+  private todoRepository = inject(TodoRepository)
   newTodoInput = new FormControl('', [Validators.required])
   todos$ = this.store.select(selectTodos)
 
   constructor() {
-    this.todoService
-      .retreiveTodos()
+    this.todoRepository
+      .retrieveTodos()
       .pipe(takeUntilDestroyed())
-      .subscribe(({ data: todos }) => {
-        this.store.dispatch(TodosApiActions.retrievedTodosList(todos))
+      .subscribe((todos) => {
+        this.store.dispatch(TodosApiActions.retrievedTodoList({ data: todos }))
       })
   }
 
@@ -54,22 +54,22 @@ export class TodoListComponent {
       return
     }
     const text = this.newTodoInput.value!
-    this.todoService.addTodo(text).subscribe(({ data }) => {
-      if (data) {
-        this.store.dispatch(TodosActions.addTodo(data.addTodo))
-      }
-    })
+    // this.todoRepository.addTodo(text).subscribe(({ data }) => {
+    //   if (data) {
+    //     this.store.dispatch(TodosActions.addTodo(data.addTodo))
+    //   }
+    // })
     this.newTodoInput.reset()
   }
 
   onRemove(id: number) {
-    this.todoService
+    this.todoRepository
       .removeTodo(id)
       .subscribe(() => this.store.dispatch(TodosActions.removeTodo({ id })))
   }
 
   onSetDone(id: number, done: boolean) {
-    this.todoService
+    this.todoRepository
       .setTodoDone(id, done)
       .subscribe(() =>
         this.store.dispatch(TodosActions.setTodoDone({ id, done }))
