@@ -1,22 +1,21 @@
+import { TodoModel } from './../../src/app/core/domain/todo/todo.model'
 import { GraphQLError } from 'graphql'
-import { Todo } from './../../shared/todo.model'
-let todos: Todo[] = [
-  { text: 'first todo', done: false, id: -2 },
-  { text: 'second todo', done: true, id: -1 },
+
+let todos: TodoModel[] = [
+  { text: 'first todo', done: false, id: '11' },
+  { text: 'second todo', done: true, id: '22' },
 ]
-let nextId = 0
 
 export const resolvers = {
   Query: {
     todos: () => todos,
   },
   Mutation: {
-    addTodo(_: unknown, args: { text: string }): Todo {
-      const todo = { text: args.text, id: nextId++, done: false }
-      todos.push(todo)
-      return todo
+    createTodo(_: unknown, args: { todo: TodoModel }): boolean {
+      todos.push(args.todo)
+      return true
     },
-    removeTodo(_: unknown, args: { id: number }): boolean {
+    deleteTodo(_: unknown, args: { id: string }): boolean {
       let found = false
       todos = todos.filter((todo) => {
         if (todo.id === args.id) {
@@ -35,12 +34,12 @@ export const resolvers = {
       }
       return true
     },
-    setTodoDone(_: unknown, args: { id: number; done: boolean }): boolean {
+    updateTodo(_: unknown, args: { todo: TodoModel }): boolean {
       let found = false
       todos = todos.map((todo) => {
-        if (todo.id !== args.id) return todo
+        if (todo.id !== args.todo.id) return todo
         found = true
-        return { ...todo, done: args.done }
+        return args.todo
       })
 
       if (!found) {

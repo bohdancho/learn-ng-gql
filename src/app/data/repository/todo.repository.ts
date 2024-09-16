@@ -14,25 +14,21 @@ const GET_TODOS = gql`
   }
 `
 
-const ADD_TODO = gql`
-  mutation AddTodo($text: String!) {
-    addTodo(text: $text) {
-      id
-      text
-      done
-    }
+const CREATE_TODO = gql`
+  mutation CreateTodo($todo: Todo!) {
+    createTodo(todo: $todo)
   }
 `
 
-const REMOVE_TODO = gql`
-  mutation RemoveTodo($id: Int!) {
+const DELETE_TODO = gql`
+  mutation DeleteTodo($id: Int!) {
     removeTodo(id: $id)
   }
 `
 
-const SET_TODO_DONE = gql`
-  mutation SetTodoDone($id: Int!, $done: Boolean!) {
-    setTodoDone(id: $id, done: $done)
+const UPDATE_TODO = gql`
+  mutation UpdateTodo($todo: Todo!) {
+    updateTodo(todo: $todo)
   }
 `
 
@@ -43,29 +39,29 @@ export class TodoRepository implements ITodoRepository {
   private apollo = inject(Apollo)
   constructor() {}
 
-  retrieveTodos() {
+  getTodos() {
     return this.apollo
-      .watchQuery<{ todos: TodoModel[] }>({
+      .query<{ todos: TodoModel[] }>({
         query: GET_TODOS,
       })
-      .valueChanges.pipe(map(({ data }) => data!.todos))
+      .pipe(map(({ data }) => data!.todos))
   }
 
-  addTodo(text: string) {
+  createTodo(todo: TodoModel) {
     return this.apollo
       .mutate<{ addTodo: TodoModel }>({
-        mutation: ADD_TODO,
+        mutation: CREATE_TODO,
         variables: {
-          text,
+          todo,
         },
       })
-      .pipe(map(({ data }) => data!.addTodo))
+      .pipe(map(() => null))
   }
 
-  removeTodo(id: number) {
+  deleteTodo(id: number) {
     return this.apollo
       .mutate({
-        mutation: REMOVE_TODO,
+        mutation: DELETE_TODO,
         variables: {
           id,
         },
@@ -73,13 +69,12 @@ export class TodoRepository implements ITodoRepository {
       .pipe(map(() => null))
   }
 
-  setTodoDone(id: number, done: boolean) {
+  updateTodo(todo: TodoModel) {
     return this.apollo
       .mutate({
-        mutation: SET_TODO_DONE,
+        mutation: UPDATE_TODO,
         variables: {
-          id,
-          done,
+          todo,
         },
       })
       .pipe(map(() => null))

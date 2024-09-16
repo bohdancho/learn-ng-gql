@@ -1,4 +1,12 @@
-import { createFeatureSelector } from '@ngrx/store'
-import { TodosStore } from './todos.reducer'
+import { createFeatureSelector, createSelector } from '@ngrx/store'
+import { TodosState } from './todos.reducer'
 
-export const selectTodos = createFeatureSelector<TodosStore>('todos')
+export const selectTodosState = createFeatureSelector<TodosState>('todos')
+export const selectTodos = createSelector(
+  selectTodosState,
+  (state) => state.data
+)
+export const selectTodosInitialLoading = createSelector(
+  selectTodosState,
+  (state) => state.isInitialLoading
+)

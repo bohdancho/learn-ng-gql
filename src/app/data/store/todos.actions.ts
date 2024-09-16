@@ -1,22 +1,23 @@
-import { createActionGroup, props } from '@ngrx/store'
-import { Todo } from '../../../../shared/todo.model'
+import { createActionGroup, emptyProps, props } from '@ngrx/store'
 import { TodoModel } from '@core/domain/todo/todo.model'
 
 export const TodosActions = createActionGroup({
   source: 'UI',
   events: {
-    addTodo: props<Todo>(),
-    addTodoSuccess: props<TodoModel>(),
-    addTodoError: props<TodoModel>(),
-
-    'Remove Todo': props<Pick<Todo, 'id'>>(),
-    'Set Todo Done': props<Pick<Todo, 'id' | 'done'>>(),
-  },
-})
-
-export const TodosApiActions = createActionGroup({
-  source: 'Todos API',
-  events: {
-    retrievedTodoList: props<{ data: Todo[] }>(),
+    'load Todos': emptyProps(),
+    'load Todos Success': props<{ todos: TodoModel[] }>(),
+    'load Todos Failure': props<{ error: string }>(),
+    'create Todo': props<{ text: string }>(),
+    'create Todo Running': props<{ todo: TodoModel }>(),
+    'create Todo Success': emptyProps(),
+    'create Todo Failure': props<{ error: string; id: string }>(),
+    'delete Todo': props<{ id: string }>(),
+    'delete Todo Running': props<{ id: string }>(),
+    'delete Todo Success': emptyProps(),
+    'delete Todo Failure': props<{ error: string; todo: TodoModel }>(),
+    'update Todo': props<TodoModel>(),
+    'update Todo Running': props<TodoModel>(),
+    'update Todo Success': emptyProps(),
+    'update Todo Failure': props<{ error: string; todo: TodoModel }>(),
   },
 })

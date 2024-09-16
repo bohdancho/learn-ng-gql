@@ -3,13 +3,19 @@ type Query {
 }
 
 type Mutation {
-  addTodo(text: String!): Todo!
-  removeTodo(id: Int!): Boolean!
-  setTodoDone(id: Int!, done: Boolean!): Boolean!
+  createTodo(todo: TodoInput!): Boolean!
+  deleteTodo(id: Int!): Boolean!
+  updateTodo(todo: TodoInput!): Boolean!
+}
+
+input TodoInput {
+  id: String!
+  text: String!
+  done: Boolean!
 }
 
 type Todo {
-  id: Int!
+  id: String!
   text: String!
   done: Boolean!
 }

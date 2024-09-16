@@ -17,12 +17,12 @@ import { TodoModel } from '@core/domain/todo/todo.model'
 })
 export class TodoItemComponent {
   @Input() todo!: TodoModel
-  @Output() setDone = new EventEmitter<boolean>()
+  @Output() update = new EventEmitter<TodoModel>()
   @Output() remove = new EventEmitter<void>()
 
   onSetDone(target: EventTarget) {
     const checkboxElem = target as HTMLInputElement
     const done = checkboxElem.checked
-    this.setDone.emit(done)
+    this.update.emit({ ...this.todo, done })
   }
 }
