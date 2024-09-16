@@ -4,6 +4,6 @@ import { TodoListViewState } from './todo-list.viewstate'
 export interface TodoListFacadeContract {
   getViewState(): TodoListViewState
   createTodo(text: string): void
-  deleteTodo(id: string): void
+  deleteTodo(todo: TodoModel): void
   updateTodo(todo: TodoModel): void
 }

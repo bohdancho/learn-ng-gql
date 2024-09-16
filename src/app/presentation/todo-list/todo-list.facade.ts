@@ -24,11 +24,11 @@ export class TodoListFacade implements TodoListFacadeContract {
     this.store.dispatch(TodosActions.createTodo({ text }))
   }
 
-  deleteTodo(id: string): void {
-    this.store.dispatch(TodosActions.deleteTodo({ id }))
+  deleteTodo(todo: TodoModel): void {
+    this.store.dispatch(TodosActions.deleteTodo({ todo }))
   }
 
   updateTodo(todo: TodoModel): void {
-    this.store.dispatch(TodosActions.updateTodo(todo))
+    this.store.dispatch(TodosActions.updateTodo({ newTodo: todo }))
   }
 }

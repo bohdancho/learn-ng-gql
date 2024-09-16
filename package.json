@@ -21,6 +21,7 @@
     "@apollo/client": "^3.0.0",
     "@ngrx/effects": "^18.0.2",
     "@ngrx/store": "^18.0.2",
+    "@ngrx/store-devtools": "^18.0.2",
     "apollo-angular": "^7.1.2",
     "graphql": "^16",
     "rxjs": "~7.8.0",

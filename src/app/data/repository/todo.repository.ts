@@ -21,8 +21,8 @@ const CREATE_TODO = gql`
 `
 
 const DELETE_TODO = gql`
-  mutation DeleteTodo($id: Int!) {
-    removeTodo(id: $id)
+  mutation DeleteTodo($id: String!) {
+    deleteTodo(id: $id)
   }
 `
 
@@ -58,7 +58,7 @@ export class TodoRepository implements ITodoRepository {
       .pipe(map(() => null))
   }
 
-  deleteTodo(id: number) {
+  deleteTodo(id: string) {
     return this.apollo
       .mutate({
         mutation: DELETE_TODO,

@@ -8,7 +8,7 @@ export function apolloOptionsFactory(): ApolloClientOptions<any> {
   const httpLink = inject(HttpLink)
   return {
     link: httpLink.create({ uri }),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({ addTypename: false }),
   }
 }
 

@@ -23,7 +23,7 @@ const FACADE_TOKEN = new InjectionToken<TodoListFacadeContract>(
       @for (todo of facade.getViewState().todos$ | async; track todo.id) {
       <app-todo-item
         [todo]="todo"
-        (remove)="this.facade.deleteTodo(todo.id)"
+        (remove)="this.facade.deleteTodo(todo)"
         (update)="this.facade.updateTodo($event)"
       />
       }

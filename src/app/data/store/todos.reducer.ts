@@ -37,9 +37,9 @@ export const todosReducer = createReducer(
       data: state.data.filter((x) => x.id !== id),
     }
   }),
-  on(TodosActions.deleteTodoRunning, (state, { id }) => ({
+  on(TodosActions.deleteTodoRunning, (state, { todo }) => ({
     ...state,
-    data: state.data.filter((x) => x.id !== id),
+    data: state.data.filter((x) => x.id !== todo.id),
   })),
   on(TodosActions.deleteTodoFailure, (state, { error, todo }) => {
     logError(error)
@@ -48,15 +48,15 @@ export const todosReducer = createReducer(
       data: [...state.data, todo],
     }
   }),
-  on(TodosActions.updateTodoRunning, (state, todo) => ({
+  on(TodosActions.updateTodoRunning, (state, { newTodo }) => ({
     ...state,
-    data: state.data.map((x) => (x.id === todo.id ? todo : x)),
+    data: state.data.map((x) => (x.id === newTodo.id ? newTodo : x)),
   })),
-  on(TodosActions.updateTodoFailure, (state, { error, todo }) => {
+  on(TodosActions.updateTodoFailure, (state, { error, oldTodo }) => {
     logError(error)
     return {
       ...state,
-      data: state.data.map((x) => (x.id === todo.id ? todo : x)),
+      data: state.data.map((x) => (x.id === oldTodo.id ? oldTodo : x)),
     }
   })
 )
