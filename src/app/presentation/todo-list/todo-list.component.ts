@@ -16,7 +16,9 @@ const FACADE_TOKEN = new InjectionToken<TodoListFacadeContract>(
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, TodoItemComponent],
   providers: [{ provide: FACADE_TOKEN, useClass: TodoListFacade }],
-  template: `<p>todos:</p>
+  template: ` @if (facade.getViewState().isLoading$ | async) {Loading...} @else
+    {
+    <p>todos:</p>
     <ul>
       @for (todo of facade.getViewState().todos$ | async; track todo.id) {
       <app-todo-item
@@ -35,7 +37,8 @@ const FACADE_TOKEN = new InjectionToken<TodoListFacadeContract>(
     />
     <p *ngIf="newTodoInput.invalid && newTodoInput.dirty">
       Please enter a valid todo
-    </p>`,
+    </p>
+    }`,
 })
 export class TodoListComponent {
   private store = inject(Store)

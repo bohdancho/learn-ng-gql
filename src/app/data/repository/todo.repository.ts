@@ -15,7 +15,7 @@ const GET_TODOS = gql`
 `
 
 const CREATE_TODO = gql`
-  mutation CreateTodo($todo: Todo!) {
+  mutation CreateTodo($todo: TodoInput!) {
     createTodo(todo: $todo)
   }
 `
@@ -27,7 +27,7 @@ const DELETE_TODO = gql`
 `
 
 const UPDATE_TODO = gql`
-  mutation UpdateTodo($todo: Todo!) {
+  mutation UpdateTodo($todo: TodoInput!) {
     updateTodo(todo: $todo)
   }
 `

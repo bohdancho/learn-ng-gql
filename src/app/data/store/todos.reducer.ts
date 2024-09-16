@@ -20,7 +20,7 @@ export const todosReducer = createReducer(
     isRunning: false,
   })),
   on(TodosActions.loadTodosFailure, (_, { error }) => {
-    alert(error)
+    logError(error)
     return {
       data: [],
       isInitialLoading: false,
@@ -31,7 +31,7 @@ export const todosReducer = createReducer(
     data: [...state.data, todo],
   })),
   on(TodosActions.createTodoFailure, (state, { error, id }) => {
-    alert(error)
+    logError(error)
     return {
       ...state,
       data: state.data.filter((x) => x.id !== id),
@@ -42,7 +42,7 @@ export const todosReducer = createReducer(
     data: state.data.filter((x) => x.id !== id),
   })),
   on(TodosActions.deleteTodoFailure, (state, { error, todo }) => {
-    alert(error)
+    logError(error)
     return {
       ...state,
       data: [...state.data, todo],
@@ -53,10 +53,14 @@ export const todosReducer = createReducer(
     data: state.data.map((x) => (x.id === todo.id ? todo : x)),
   })),
   on(TodosActions.updateTodoFailure, (state, { error, todo }) => {
-    alert(error)
+    logError(error)
     return {
       ...state,
       data: state.data.map((x) => (x.id === todo.id ? todo : x)),
     }
   })
 )
+
+function logError(error: string) {
+  alert(error)
+}
