@@ -1,10 +1,6 @@
 import { TodoModel } from './../../src/app/core/domain/todo/todo.model'
 import { GraphQLError } from 'graphql'
 
-async function wait(ms: number) {
-  return new Promise((res) => setTimeout(res, ms))
-}
-
 let todos: TodoModel[] = [
   { text: 'first todo', done: false, id: '11' },
   { text: 'second todo', done: true, id: '22' },
@@ -59,4 +55,8 @@ export const resolvers = {
       return true
     },
   },
+}
+
+async function wait(ms: number) {
+  return new Promise((res) => setTimeout(res, ms))
 }
