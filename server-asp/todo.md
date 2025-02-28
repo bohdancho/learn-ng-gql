@@ -1,6 +1,6 @@
 ### dotnet EFCore & DB & gql server 
 - [x] setup dotnet to return hello world
-- [ ] setup dotnet gql to return todos
+- [x] setup dotnet gql to return todos
 - [ ] create delete update mutations
 - [ ] persist to sqlite
 - [ ] efcore
