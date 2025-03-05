@@ -1,3 +1,5 @@
+using SQLite;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,7 +10,9 @@ builder.Services
 .AddQueryType<Query>()
 .AddMutationType<Mutation>();
 
-builder.Services.AddSingleton<TodoRepository, TodoRepository>();
+var db = new SQLiteConnection("./db.sqlite");
+db.CreateTable<Todo>();
+builder.Services.AddSingleton((_) => db);
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
@@ -42,43 +46,28 @@ app.MapGraphQL();
 
 app.Run();
 
-public class TodoRepository
+public class Query([Service] SQLiteConnection db)
 {
-  public readonly List<Todo> todos = [
-    new Todo
-    {
-      Id = "0",
-         Done= true,
-         Text= "123"
-    }
-  ];
+  public Todo[] Todos() => db.Table<Todo>().ToArray();
 }
 
-public class Query([Service] TodoRepository todoRepository)
+public class Mutation([Service] SQLiteConnection db)
 {
-  public Todo[] Todos() => [.. todoRepository.todos];
-}
-
-public class Mutation([Service] TodoRepository todoRepository)
-{
-
   public bool CreateTodo(Todo todo)
   {
-    todoRepository.todos.Add(todo);
+    db.Insert(todo);
     return true;
   }
 
   public bool DeleteTodo(string id)
   {
-    var idx = todoRepository.todos.FindIndex(todo => todo.Id == id);
-    todoRepository.todos.RemoveAt(idx);
+    db.Delete<Todo>(id);
     return true;
   }
 
   public bool UpdateTodo(Todo todo)
   {
-    var idx = todoRepository.todos.FindIndex(t => t.Id == todo.Id);
-    todoRepository.todos[idx] = todo;
+    db.Update(todo);
     return true;
   }
 
@@ -86,7 +75,8 @@ public class Mutation([Service] TodoRepository todoRepository)
 
 public record Todo
 {
-  public required string Id { get; set; }
-  public required string Text { get; set; }
-  public required bool Done { get; set; }
+  [PrimaryKey]
+  public string Id { get; set; }
+  public string Text { get; set; }
+  public bool Done { get; set; }
 }
