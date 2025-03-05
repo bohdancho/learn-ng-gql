@@ -75,10 +75,9 @@ public class Mutation([Service] TodoRepository todoRepository)
     return true;
   }
 
-  // BUG: changing "done" in frontend doesn't work (doing so though the gql web view works)
   public bool UpdateTodo(Todo todo)
   {
-    var idx = todoRepository.todos.FindIndex(todo => todo.Id == todo.Id);
+    var idx = todoRepository.todos.FindIndex(t => t.Id == todo.Id);
     todoRepository.todos[idx] = todo;
     return true;
   }
