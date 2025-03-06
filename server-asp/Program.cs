@@ -1,18 +1,12 @@
-using SQLite;
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services
 .AddGraphQLServer()
 .AddQueryType<Query>()
 .AddMutationType<Mutation>();
 
-var db = new SQLiteConnection("./db.sqlite");
-db.CreateTable<Todo>();
-builder.Services.AddSingleton((_) => db);
+builder.Services.AddDbContext<TodoContext>();
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
@@ -29,7 +23,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
   app.MapOpenApi();
@@ -38,45 +31,35 @@ if (app.Environment.IsDevelopment())
 app.UseCors(MyAllowSpecificOrigins);
 app.UseHttpsRedirection();
 
-app.MapGet("/ping", () =>
-    {
-      return "pong";
-    });
 app.MapGraphQL();
 
 app.Run();
 
-public class Query([Service] SQLiteConnection db)
+public class Query()
 {
-  public Todo[] Todos() => db.Table<Todo>().ToArray();
+  public Todo[] Todos([Service] TodoContext db) => db.Todos.ToArray();
 }
 
-public class Mutation([Service] SQLiteConnection db)
+public class Mutation()
 {
-  public bool CreateTodo(Todo todo)
+  public bool CreateTodo([Service] TodoContext db, Todo todo)
   {
-    db.Insert(todo);
+    db.Add(todo);
+    db.SaveChanges();
     return true;
   }
 
-  public bool DeleteTodo(string id)
+  public bool DeleteTodo([Service] TodoContext db, string id)
   {
-    db.Delete<Todo>(id);
+    db.Remove(new Todo { Id = id });
+    db.SaveChanges();
     return true;
   }
 
-  public bool UpdateTodo(Todo todo)
+  public bool UpdateTodo([Service] TodoContext db, Todo todo)
   {
     db.Update(todo);
+    db.SaveChanges();
     return true;
   }
-
-}
-
-public record Todo
-{
-  [PrimaryKey]
-  public string Id { get; set; }
-  public string Text { get; set; }
-  public bool Done { get; set; }
 }
