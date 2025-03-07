@@ -4,6 +4,6 @@
 - [x] create delete update mutations
 - [x] persist to sqlite
 - [x] efcore
-- [ ] subscriptions (multi user)
-- [ ] apollo codegen
-- [ ] fancy file structure
+- [x] subscriptions (multi user)
+- [x] apollo codegen
+- [ ] fancy MassTransitBus architecture

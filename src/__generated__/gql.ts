@@ -14,10 +14,22 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "query GetTodos {\n  todos {\n    id\n    text\n    done\n  }\n}\n\nmutation CreateTodo($todo: TodoInput!) {\n  createTodo(todo: $todo)\n}\n\nmutation DeleteTodo($id: String!) {\n  deleteTodo(id: $id)\n}\n\nmutation UpdateTodo($todo: TodoInput!) {\n  updateTodo(todo: $todo)\n}\n\nsubscription TodoCreated {\n  todoCreated {\n    id\n    text\n    done\n  }\n}\n\nsubscription TodoDeleted {\n  todoDeleted\n}\n\nsubscription TodoUpdated {\n  todoUpdated {\n    id\n    text\n    done\n  }\n}": typeof types.GetTodosDocument,
+    "\n  query GetTodos {\n    todos {\n      id\n      text\n      done\n    }\n  }\n": typeof types.GetTodosDocument,
+    "\n  mutation CreateTodo($todo: TodoInput!) {\n    createTodo(todo: $todo)\n  }\n": typeof types.CreateTodoDocument,
+    "\n  mutation DeleteTodo($id: String!) {\n    deleteTodo(id: $id)\n  }\n": typeof types.DeleteTodoDocument,
+    "\n  mutation UpdateTodo($todo: TodoInput!) {\n    updateTodo(todo: $todo)\n  }\n": typeof types.UpdateTodoDocument,
+    "\n  subscription TodoCreated {\n    todoCreated {\n      id\n      text\n      done\n    }\n  }\n": typeof types.TodoCreatedDocument,
+    "\n  subscription TodoDeleted {\n    todoDeleted\n  }\n": typeof types.TodoDeletedDocument,
+    "\n  subscription TodoUpdated {\n    todoUpdated {\n      id\n      text\n      done\n    }\n  }\n": typeof types.TodoUpdatedDocument,
 };
 const documents: Documents = {
-    "query GetTodos {\n  todos {\n    id\n    text\n    done\n  }\n}\n\nmutation CreateTodo($todo: TodoInput!) {\n  createTodo(todo: $todo)\n}\n\nmutation DeleteTodo($id: String!) {\n  deleteTodo(id: $id)\n}\n\nmutation UpdateTodo($todo: TodoInput!) {\n  updateTodo(todo: $todo)\n}\n\nsubscription TodoCreated {\n  todoCreated {\n    id\n    text\n    done\n  }\n}\n\nsubscription TodoDeleted {\n  todoDeleted\n}\n\nsubscription TodoUpdated {\n  todoUpdated {\n    id\n    text\n    done\n  }\n}": types.GetTodosDocument,
+    "\n  query GetTodos {\n    todos {\n      id\n      text\n      done\n    }\n  }\n": types.GetTodosDocument,
+    "\n  mutation CreateTodo($todo: TodoInput!) {\n    createTodo(todo: $todo)\n  }\n": types.CreateTodoDocument,
+    "\n  mutation DeleteTodo($id: String!) {\n    deleteTodo(id: $id)\n  }\n": types.DeleteTodoDocument,
+    "\n  mutation UpdateTodo($todo: TodoInput!) {\n    updateTodo(todo: $todo)\n  }\n": types.UpdateTodoDocument,
+    "\n  subscription TodoCreated {\n    todoCreated {\n      id\n      text\n      done\n    }\n  }\n": types.TodoCreatedDocument,
+    "\n  subscription TodoDeleted {\n    todoDeleted\n  }\n": types.TodoDeletedDocument,
+    "\n  subscription TodoUpdated {\n    todoUpdated {\n      id\n      text\n      done\n    }\n  }\n": types.TodoUpdatedDocument,
 };
 
 /**
@@ -37,7 +49,31 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "query GetTodos {\n  todos {\n    id\n    text\n    done\n  }\n}\n\nmutation CreateTodo($todo: TodoInput!) {\n  createTodo(todo: $todo)\n}\n\nmutation DeleteTodo($id: String!) {\n  deleteTodo(id: $id)\n}\n\nmutation UpdateTodo($todo: TodoInput!) {\n  updateTodo(todo: $todo)\n}\n\nsubscription TodoCreated {\n  todoCreated {\n    id\n    text\n    done\n  }\n}\n\nsubscription TodoDeleted {\n  todoDeleted\n}\n\nsubscription TodoUpdated {\n  todoUpdated {\n    id\n    text\n    done\n  }\n}"): (typeof documents)["query GetTodos {\n  todos {\n    id\n    text\n    done\n  }\n}\n\nmutation CreateTodo($todo: TodoInput!) {\n  createTodo(todo: $todo)\n}\n\nmutation DeleteTodo($id: String!) {\n  deleteTodo(id: $id)\n}\n\nmutation UpdateTodo($todo: TodoInput!) {\n  updateTodo(todo: $todo)\n}\n\nsubscription TodoCreated {\n  todoCreated {\n    id\n    text\n    done\n  }\n}\n\nsubscription TodoDeleted {\n  todoDeleted\n}\n\nsubscription TodoUpdated {\n  todoUpdated {\n    id\n    text\n    done\n  }\n}"];
+export function gql(source: "\n  query GetTodos {\n    todos {\n      id\n      text\n      done\n    }\n  }\n"): (typeof documents)["\n  query GetTodos {\n    todos {\n      id\n      text\n      done\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreateTodo($todo: TodoInput!) {\n    createTodo(todo: $todo)\n  }\n"): (typeof documents)["\n  mutation CreateTodo($todo: TodoInput!) {\n    createTodo(todo: $todo)\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeleteTodo($id: String!) {\n    deleteTodo(id: $id)\n  }\n"): (typeof documents)["\n  mutation DeleteTodo($id: String!) {\n    deleteTodo(id: $id)\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateTodo($todo: TodoInput!) {\n    updateTodo(todo: $todo)\n  }\n"): (typeof documents)["\n  mutation UpdateTodo($todo: TodoInput!) {\n    updateTodo(todo: $todo)\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  subscription TodoCreated {\n    todoCreated {\n      id\n      text\n      done\n    }\n  }\n"): (typeof documents)["\n  subscription TodoCreated {\n    todoCreated {\n      id\n      text\n      done\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  subscription TodoDeleted {\n    todoDeleted\n  }\n"): (typeof documents)["\n  subscription TodoDeleted {\n    todoDeleted\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  subscription TodoUpdated {\n    todoUpdated {\n      id\n      text\n      done\n    }\n  }\n"): (typeof documents)["\n  subscription TodoUpdated {\n    todoUpdated {\n      id\n      text\n      done\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

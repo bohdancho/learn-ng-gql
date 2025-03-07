@@ -1,3 +1,3 @@
-import { Todo } from '../../../../generated'
+import { Todo } from '../../../../__generated__/graphql'
 
 export type TodoModel = Todo
