@@ -7,11 +7,16 @@ import {
 } from '@data/store/todos.selectors'
 import { TodoModel } from '@core/domain/todo/todo.model'
 import { TodosActions } from '@data/store/todos.actions'
+import { TODO_REPOSITORY_TOKEN } from '../../injection'
 
 export class TodoListFacade implements TodoListFacadeContract {
   private store = inject(Store)
+  private todoRepository = inject(TODO_REPOSITORY_TOKEN)
 
-  constructor() {}
+  constructor() {
+    this.store.dispatch(TodosActions.loadTodos())
+    this.registerSubscriptions()
+  }
 
   getViewState() {
     return {
@@ -30,5 +35,29 @@ export class TodoListFacade implements TodoListFacadeContract {
 
   updateTodo(todo: TodoModel): void {
     this.store.dispatch(TodosActions.updateTodo({ newTodo: todo }))
+  }
+
+  private registerSubscriptions() {
+    this.todoRepository
+      .todoCreated()
+      .subscribe(({ todoCreated }) =>
+        this.store.dispatch(
+          TodosActions.createTodoSuccess({ todo: todoCreated })
+        )
+      )
+
+    this.todoRepository
+      .todoDeleted()
+      .subscribe(({ todoDeleted }) =>
+        this.store.dispatch(TodosActions.deleteTodoSuccess({ id: todoDeleted }))
+      )
+
+    this.todoRepository
+      .todoUpdated()
+      .subscribe(({ todoUpdated }) =>
+        this.store.dispatch(
+          TodosActions.updateTodoSuccess({ todo: todoUpdated })
+        )
+      )
   }
 }

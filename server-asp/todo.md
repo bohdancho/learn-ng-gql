@@ -5,5 +5,5 @@
 - [x] persist to sqlite
 - [x] efcore
 - [ ] subscriptions (multi user)
-- [ ] apollo typegen
+- [ ] apollo codegen
 - [ ] fancy file structure

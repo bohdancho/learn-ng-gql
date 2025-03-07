@@ -3,41 +3,13 @@ import { Apollo, gql } from 'apollo-angular'
 import { ITodoRepository } from '@core/repository/todo.repository'
 import { map } from 'rxjs'
 import { TodoModel } from '@core/domain/todo/todo.model'
-
-const GET_TODOS = gql`
-  query GetTodos {
-    todos {
-      id
-      text
-      done
-    }
-  }
-`
-
-const CREATE_TODO = gql`
-  mutation CreateTodo($todo: TodoInput!) {
-    createTodo(todo: $todo)
-  }
-`
-
-const DELETE_TODO = gql`
-  mutation DeleteTodo($id: String!) {
-    deleteTodo(id: $id)
-  }
-`
-
-const UPDATE_TODO = gql`
-  mutation UpdateTodo($todo: TodoInput!) {
-    updateTodo(todo: $todo)
-  }
-`
+import { DocumentNode } from '@apollo/client/core'
 
 @Injectable({
   providedIn: 'root',
 })
 export class TodoRepository implements ITodoRepository {
   private apollo = inject(Apollo)
-  constructor() {}
 
   getTodos() {
     return this.apollo
@@ -79,4 +51,85 @@ export class TodoRepository implements ITodoRepository {
       })
       .pipe(map(() => null))
   }
+
+  todoCreated() {
+    return this.apollo
+      .subscribe({
+        fetchPolicy: 'no-cache',
+        query: TODO_CREATED,
+      })
+      .pipe(map((result) => result.data as { todoCreated: TodoModel }))
+  }
+
+  todoDeleted() {
+    return this.apollo
+      .subscribe({
+        fetchPolicy: 'no-cache',
+        query: TODO_DELETED,
+      })
+      .pipe(map((result) => result.data as { todoDeleted: string }))
+  }
+
+  todoUpdated() {
+    return this.apollo
+      .subscribe({
+        fetchPolicy: 'no-cache',
+        query: TODO_UPDATED,
+      })
+      .pipe(map((result) => result.data as { todoUpdated: TodoModel }))
+  }
 }
+
+const GET_TODOS = gql`
+  query GetTodos {
+    todos {
+      id
+      text
+      done
+    }
+  }
+`
+
+const CREATE_TODO = gql`
+  mutation CreateTodo($todo: TodoInput!) {
+    createTodo(todo: $todo)
+  }
+`
+
+const DELETE_TODO = gql`
+  mutation DeleteTodo($id: String!) {
+    deleteTodo(id: $id)
+  }
+`
+
+const UPDATE_TODO = gql`
+  mutation UpdateTodo($todo: TodoInput!) {
+    updateTodo(todo: $todo)
+  }
+`
+
+const TODO_CREATED: DocumentNode = gql`
+  subscription TodoCreated {
+    todoCreated {
+      id
+      text
+      done
+    }
+  }
+`
+
+const TODO_DELETED = gql`
+  subscription TodoDeleted {
+    todoDeleted
+  }
+`
+
+const TODO_UPDATED = gql`
+  subscription TodoUpdated {
+    todoUpdated {
+      id
+      text
+      done
+    }
+  }
+`

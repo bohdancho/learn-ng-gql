@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { TodosActions } from './todos.actions'
 import { TODO_REPOSITORY_TOKEN } from '../../injection'
-import { catchError, map, mergeMap, of, switchMap } from 'rxjs'
+import { catchError, EMPTY, map, mergeMap, of, switchMap } from 'rxjs'
 import { concatLatestFrom } from '@ngrx/operators'
 import * as uuid from 'uuid'
 import { Store } from '@ngrx/store'
@@ -44,7 +44,7 @@ export class TodoEffects {
       ofType(TodosActions.createTodoRunning),
       switchMap(({ todo }) =>
         this.repository.createTodo(todo).pipe(
-          map(() => TodosActions.createTodoSuccess()),
+          switchMap(() => EMPTY),
           catchError((error: Error) =>
             of(
               TodosActions.createTodoFailure({
@@ -75,7 +75,7 @@ export class TodoEffects {
       ofType(TodosActions.updateTodoRunning),
       switchMap(({ newTodo, oldTodo }) =>
         this.repository.updateTodo(newTodo).pipe(
-          map(() => TodosActions.updateTodoSuccess()),
+          switchMap(() => EMPTY),
           catchError((error: Error) =>
             of(
               TodosActions.updateTodoFailure({
@@ -104,7 +104,7 @@ export class TodoEffects {
       ofType(TodosActions.deleteTodoRunning),
       switchMap(({ todo }) =>
         this.repository.deleteTodo(todo.id).pipe(
-          map(() => TodosActions.deleteTodoSuccess()),
+          switchMap(() => EMPTY),
           catchError((error: Error) =>
             of(
               TodosActions.deleteTodoFailure({

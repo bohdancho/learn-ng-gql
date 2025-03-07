@@ -6,4 +6,7 @@ export interface ITodoRepository {
   createTodo(todo: TodoModel): Observable<null>
   deleteTodo(id: string): Observable<null>
   updateTodo(todo: TodoModel): Observable<null>
+  todoCreated(): Observable<{ todoCreated: TodoModel }>
+  todoDeleted(): Observable<{ todoDeleted: string }>
+  todoUpdated(): Observable<{ todoUpdated: TodoModel }>
 }
