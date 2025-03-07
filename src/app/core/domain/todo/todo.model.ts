@@ -1,5 +1,3 @@
-export interface TodoModel {
-  id: string
-  text: string
-  done: boolean
-}
+import { Todo } from '../../../../generated'
+
+export type TodoModel = Todo

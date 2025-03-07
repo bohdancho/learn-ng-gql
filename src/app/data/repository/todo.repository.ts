@@ -1,9 +1,26 @@
 import { inject, Injectable } from '@angular/core'
-import { Apollo, gql } from 'apollo-angular'
+import { Apollo } from 'apollo-angular'
 import { ITodoRepository } from '@core/repository/todo.repository'
 import { map } from 'rxjs'
 import { TodoModel } from '@core/domain/todo/todo.model'
-import { DocumentNode } from '@apollo/client/core'
+import {
+  GetTodosQuery,
+  CreateTodoMutation,
+  DeleteTodoMutation,
+  DeleteTodoMutationVariables,
+  UpdateTodoMutation,
+  UpdateTodoMutationVariables,
+  TodoUpdatedSubscription,
+  TodoCreatedSubscription,
+  TodoDeletedSubscription,
+  GetTodosDocument,
+  CreateTodoDocument,
+  DeleteTodoDocument,
+  UpdateTodoDocument,
+  TodoCreatedDocument,
+  TodoDeletedDocument,
+  TodoUpdatedDocument,
+} from '../../../__generated__/graphql'
 
 @Injectable({
   providedIn: 'root',
@@ -13,16 +30,16 @@ export class TodoRepository implements ITodoRepository {
 
   getTodos() {
     return this.apollo
-      .query<{ todos: TodoModel[] }>({
-        query: GET_TODOS,
+      .query<GetTodosQuery>({
+        query: GetTodosDocument,
       })
-      .pipe(map(({ data }) => data!.todos))
+      .pipe(map(({ data }) => data.todos))
   }
 
   createTodo(todo: TodoModel) {
     return this.apollo
-      .mutate<{ addTodo: TodoModel }>({
-        mutation: CREATE_TODO,
+      .mutate<CreateTodoMutation>({
+        mutation: CreateTodoDocument,
         variables: {
           todo,
         },
@@ -32,104 +49,50 @@ export class TodoRepository implements ITodoRepository {
 
   deleteTodo(id: string) {
     return this.apollo
-      .mutate({
-        mutation: DELETE_TODO,
+      .mutate<DeleteTodoMutation>({
+        mutation: DeleteTodoDocument,
         variables: {
           id,
-        },
+        } satisfies DeleteTodoMutationVariables,
       })
       .pipe(map(() => null))
   }
 
   updateTodo(todo: TodoModel) {
     return this.apollo
-      .mutate({
-        mutation: UPDATE_TODO,
+      .mutate<UpdateTodoMutation>({
+        mutation: UpdateTodoDocument,
         variables: {
           todo,
-        },
+        } satisfies UpdateTodoMutationVariables,
       })
       .pipe(map(() => null))
   }
 
   todoCreated() {
     return this.apollo
-      .subscribe({
+      .subscribe<TodoCreatedSubscription>({
         fetchPolicy: 'no-cache',
-        query: TODO_CREATED,
+        query: TodoCreatedDocument,
       })
-      .pipe(map((result) => result.data as { todoCreated: TodoModel }))
+      .pipe(map((result) => result.data!))
   }
 
   todoDeleted() {
     return this.apollo
-      .subscribe({
+      .subscribe<TodoDeletedSubscription>({
         fetchPolicy: 'no-cache',
-        query: TODO_DELETED,
+        query: TodoDeletedDocument,
       })
-      .pipe(map((result) => result.data as { todoDeleted: string }))
+      .pipe(map((result) => result.data!))
   }
 
   todoUpdated() {
     return this.apollo
-      .subscribe({
+      .subscribe<TodoUpdatedSubscription>({
         fetchPolicy: 'no-cache',
-        query: TODO_UPDATED,
+        query: TodoUpdatedDocument,
       })
-      .pipe(map((result) => result.data as { todoUpdated: TodoModel }))
+      .pipe(map((result) => result.data!))
   }
 }
-
-const GET_TODOS = gql`
-  query GetTodos {
-    todos {
-      id
-      text
-      done
-    }
-  }
-`
-
-const CREATE_TODO = gql`
-  mutation CreateTodo($todo: TodoInput!) {
-    createTodo(todo: $todo)
-  }
-`
-
-const DELETE_TODO = gql`
-  mutation DeleteTodo($id: String!) {
-    deleteTodo(id: $id)
-  }
-`
-
-const UPDATE_TODO = gql`
-  mutation UpdateTodo($todo: TodoInput!) {
-    updateTodo(todo: $todo)
-  }
-`
-
-const TODO_CREATED: DocumentNode = gql`
-  subscription TodoCreated {
-    todoCreated {
-      id
-      text
-      done
-    }
-  }
-`
-
-const TODO_DELETED = gql`
-  subscription TodoDeleted {
-    todoDeleted
-  }
-`
-
-const TODO_UPDATED = gql`
-  subscription TodoUpdated {
-    todoUpdated {
-      id
-      text
-      done
-    }
-  }
-`

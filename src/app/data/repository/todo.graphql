@@ -1,0 +1,39 @@
+query GetTodos {
+  todos {
+    id
+    text
+    done
+  }
+}
+
+mutation CreateTodo($todo: TodoInput!) {
+  createTodo(todo: $todo)
+}
+
+mutation DeleteTodo($id: String!) {
+  deleteTodo(id: $id)
+}
+
+mutation UpdateTodo($todo: TodoInput!) {
+  updateTodo(todo: $todo)
+}
+
+subscription TodoCreated {
+  todoCreated {
+    id
+    text
+    done
+  }
+}
+
+subscription TodoDeleted {
+  todoDeleted
+}
+
+subscription TodoUpdated {
+  todoUpdated {
+    id
+    text
+    done
+  }
+}
