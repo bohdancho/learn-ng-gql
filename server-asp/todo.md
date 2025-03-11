@@ -7,3 +7,10 @@
 - [x] subscriptions (multi user)
 - [x] apollo codegen
 - [ ] fancy MassTransitBus architecture
+  - [ ] setup Domain, Infrastructure, Application, Api for GET Query
+  - [ ] POST query
+  - [ ] POST subscription
+  - [ ] PUT query
+  - [ ] PUT subscription
+  - [ ] DELETE query
+  - [ ] DELETE subscription
