@@ -15,10 +15,7 @@ builder.Services
 //   .AddMutationType<Mutation>()
 //   .AddSubscriptionType<Subscription>();
 
-builder.Services.AddDbContext<TodoDbContext>(options =>
-{
-  options.UseSqlite($"Data Source=./db-efcore.sqlite");
-});
+builder.Services.AddDbContext<TodoDbContext>();
 
 builder.Services.AddScoped<ITodoRepository, TodoRepository>();
 
