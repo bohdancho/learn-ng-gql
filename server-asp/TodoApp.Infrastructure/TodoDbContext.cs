@@ -3,9 +3,7 @@ using TodoApp.Domain.Model.TodoAggregate;
 
 namespace TodoApp.Infrastructure;
 
-public class TodoDbContext : DbContext
+public class TodoDbContext(DbContextOptions<TodoDbContext> options) : DbContext(options)
 {
   public DbSet<Todo> Todos => Set<Todo>();
-
-  public TodoDbContext(DbContextOptions<TodoDbContext> options) : base(options) { }
 }

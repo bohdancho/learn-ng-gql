@@ -17,7 +17,7 @@ builder.Services
 
 builder.Services.AddDbContext<TodoDbContext>(options =>
 {
-    options.UseSqlite($"Data Source=./db-efcore.sqlite");
+  options.UseSqlite($"Data Source=./db-efcore.sqlite");
 });
 
 builder.Services.AddScoped<ITodoRepository, TodoRepository>();
@@ -25,13 +25,13 @@ builder.Services.AddScoped<ITodoRepository, TodoRepository>();
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
     {
-        options.AddPolicy(name: MyAllowSpecificOrigins,
-              policy =>
-              {
-                  policy.WithOrigins("http://localhost:4200")
-                .AllowAnyMethod()
-                 .AllowAnyHeader();
-              });
+      options.AddPolicy(name: MyAllowSpecificOrigins,
+            policy =>
+            {
+              policy.WithOrigins("http://localhost:4200")
+              .AllowAnyMethod()
+               .AllowAnyHeader();
+            });
     });
 
 
@@ -39,7 +39,11 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+  var scope = app.Services.CreateScope();
+  var dbContext = scope.ServiceProvider.GetRequiredService<TodoDbContext>();
+  if (dbContext.Database.GetPendingMigrations().Any()) dbContext.Database.Migrate();
+
+  app.MapOpenApi();
 }
 
 app.UseCors(MyAllowSpecificOrigins);
